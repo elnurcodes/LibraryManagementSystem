@@ -21,6 +21,13 @@ public class LibraryApp {
         JButton returnBookButton = new JButton("Return Book");
         JButton displayBooksButton = new JButton("Display Books");
 
+        //Placeholder actions
+        addBookButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Add Book clicked!"));
+        removeBookButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Remove Book clicked!"));
+        borrowBookButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Borrow Book clicked!"));
+        returnBookButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Return Book clicked!"));
+        displayBooksButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Display Books clicked!"));
+
         //Buttons to the panel
         panel.add(addBookButton);
         panel.add(removeBookButton);
