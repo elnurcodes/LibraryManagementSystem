@@ -3,42 +3,52 @@ package library.frontend;
 import javax.swing.*;
 import java.awt.*;
 
-public class LibraryApp {
+public class LibraryApp extends JFrame {
+    public static library.backend.Library library; // Shared library instance
+    private JButton addBookButton, removeBookButton, borrowBookButton, returnBookButton, displayBooksButton;
+
+    public LibraryApp() {
+        // Initialize the shared library instance
+        library = new library.backend.Library();
+
+        // Set up the main JFrame
+        setTitle("Library Management System");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        // Create buttons
+        addBookButton = new JButton("Add Book");
+        removeBookButton = new JButton("Remove Book");
+        borrowBookButton = new JButton("Borrow Book");
+        returnBookButton = new JButton("Return Book");
+        displayBooksButton = new JButton("Display Books");
+
+        // Add buttons to a JPanel
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(5, 1, 10, 10));
+        buttonPanel.add(addBookButton);
+        buttonPanel.add(removeBookButton);
+        buttonPanel.add(borrowBookButton);
+        buttonPanel.add(returnBookButton);
+        buttonPanel.add(displayBooksButton);
+
+        add(buttonPanel, BorderLayout.CENTER);
+
+        // Add action listeners for buttons
+        addBookButton.addActionListener(e -> new AddBookDialog(LibraryApp.this).setVisible(true)); // Use LibraryApp.this here
+        removeBookButton.addActionListener(e -> System.out.println("Remove Book clicked"));
+        borrowBookButton.addActionListener(e -> System.out.println("Borrow Book clicked"));
+        returnBookButton.addActionListener(e -> System.out.println("Return Book clicked"));
+        displayBooksButton.addActionListener(e -> System.out.println("Display Books clicked"));
+
+        setLocationRelativeTo(null); // Center the window on the screen
+    }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Library Management System");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 400);
-
-        //A panel for buttons
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(5, 1, 10, 10)); // 5 rows, 1 column, 10px gaps
-
-        //Buttons
-        JButton addBookButton = new JButton("Add Book");
-        JButton removeBookButton = new JButton("Remove Book");
-        JButton borrowBookButton = new JButton("Borrow Book");
-        JButton returnBookButton = new JButton("Return Book");
-        JButton displayBooksButton = new JButton("Display Books");
-
-        //Placeholder actions
-        addBookButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Add Book clicked!"));
-        removeBookButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Remove Book clicked!"));
-        borrowBookButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Borrow Book clicked!"));
-        returnBookButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Return Book clicked!"));
-        displayBooksButton.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Display Books clicked!"));
-
-        //Buttons to the panel
-        panel.add(addBookButton);
-        panel.add(removeBookButton);
-        panel.add(borrowBookButton);
-        panel.add(returnBookButton);
-        panel.add(displayBooksButton);
-
-        //A panel to the frame
-        frame.add(panel);
-
-        //The window visible
-        frame.setVisible(true);
+        SwingUtilities.invokeLater(() -> {
+            LibraryApp app = new LibraryApp();
+            app.setVisible(true);
+        });
     }
 }
