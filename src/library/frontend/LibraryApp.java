@@ -32,6 +32,34 @@ public class LibraryApp extends JFrame {
         saveLibraryButton = new JButton("Save Library");
         loadLibraryButton = new JButton("Load Library");
 
+        // Button Styling: Set fonts, background, and foreground colors for buttons
+        addBookButton.setFont(new Font("Arial", Font.BOLD, 14));
+        addBookButton.setBackground(new Color(100, 149, 237)); // Light blue color
+        addBookButton.setForeground(Color.WHITE);
+
+        removeBookButton.setFont(new Font("Arial", Font.BOLD, 14));
+        removeBookButton.setBackground(new Color(255, 99, 71)); // Tomato red
+        removeBookButton.setForeground(Color.WHITE);
+
+        borrowBookButton.setFont(new Font("Arial", Font.BOLD, 14));
+        returnBookButton.setFont(new Font("Arial", Font.BOLD, 14));
+        displayBooksButton.setFont(new Font("Arial", Font.BOLD, 14));
+        sortByTitleButton.setFont(new Font("Arial", Font.BOLD, 14));
+        sortByAuthorButton.setFont(new Font("Arial", Font.BOLD, 14));
+        saveLibraryButton.setFont(new Font("Arial", Font.BOLD, 14));
+        loadLibraryButton.setFont(new Font("Arial", Font.BOLD, 14));
+
+        // Tooltips for buttons
+        addBookButton.setToolTipText("Click to add a new book to the library");
+        removeBookButton.setToolTipText("Click to remove a book by ISBN");
+        borrowBookButton.setToolTipText("Click to borrow a book");
+        returnBookButton.setToolTipText("Click to return a borrowed book");
+        displayBooksButton.setToolTipText("Click to view all books in the library");
+        sortByTitleButton.setToolTipText("Click to sort books by title");
+        sortByAuthorButton.setToolTipText("Click to sort books by author");
+        saveLibraryButton.setToolTipText("Click to save the current library data to a file");
+        loadLibraryButton.setToolTipText("Click to load the library data from a file");
+
         // Add buttons to a JPanel
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(9, 1, 10, 10)); // Updated layout for extra buttons
@@ -110,6 +138,14 @@ public class LibraryApp extends JFrame {
             }
         });
 
+        // Add Clear Search Button
+        JButton clearSearchButton = new JButton("Clear Search");
+        clearSearchButton.addActionListener(e -> {
+            searchField.setText("");
+            displayBooks(library.getBooks()); // Reset the display
+        });
+        searchPanel.add(clearSearchButton);
+
         // Add panels to the frame
         add(searchPanel, BorderLayout.NORTH); // Search panel at the top
         add(buttonPanel, BorderLayout.CENTER); // Buttons in the center
@@ -143,6 +179,7 @@ public class LibraryApp extends JFrame {
             boolean success = library.removeBook(isbn.trim());
             if (success) {
                 JOptionPane.showMessageDialog(this, "Book removed successfully.");
+                displayBooks(library.getBooks()); // Refresh the table
             } else {
                 JOptionPane.showMessageDialog(this, "Error: No book found with ISBN " + isbn);
             }
