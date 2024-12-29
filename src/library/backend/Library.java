@@ -29,8 +29,15 @@ public class Library {
         return books;
     }
 
-    public void removeBook(String isbn) {
-        books.removeIf(book -> book.getIsbn().equals(isbn));
+    // Remove a book by ISBN with validation
+    public boolean removeBook(String isbn) {
+        boolean removed = books.removeIf(book -> book.getIsbn().equals(isbn));
+        if (removed) {
+            System.out.println("Book with ISBN " + isbn + " has been removed.");
+        } else {
+            System.out.println("Error: No book found with ISBN " + isbn + ".");
+        }
+        return removed;
     }
 
     public boolean borrowBook(String isbn) {

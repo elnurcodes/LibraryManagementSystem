@@ -47,7 +47,7 @@ public class LibraryApp extends JFrame {
 
         // Add action listeners for buttons
         addBookButton.addActionListener(e -> new AddBookDialog(LibraryApp.this).setVisible(true)); // Add Book Dialog
-        removeBookButton.addActionListener(e -> System.out.println("Remove Book clicked"));
+        removeBookButton.addActionListener(e -> showRemoveBookDialog()); // Show Remove Book Dialog
         borrowBookButton.addActionListener(e -> new BorrowBookDialog(LibraryApp.this).setVisible(true)); // Borrow Book Dialog
         returnBookButton.addActionListener(e -> new ReturnBookDialog(LibraryApp.this).setVisible(true)); // Return Book Dialog
         displayBooksButton.addActionListener(e -> displayBooks(library.getBooks())); // Show all books by default
@@ -131,6 +131,24 @@ public class LibraryApp extends JFrame {
         dialog.add(scrollPane, BorderLayout.CENTER);
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
+    }
+
+    // Method to show Remove Book Dialog
+    private void showRemoveBookDialog() {
+        // Ask the user for the ISBN of the book to remove
+        String isbn = JOptionPane.showInputDialog(this, "Enter ISBN of the book to remove:");
+
+        if (isbn != null && !isbn.trim().isEmpty()) {
+            // Try to remove the book from the library
+            boolean success = library.removeBook(isbn.trim());
+            if (success) {
+                JOptionPane.showMessageDialog(this, "Book removed successfully.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Error: No book found with ISBN " + isbn);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "ISBN cannot be empty.");
+        }
     }
 
     public static void main(String[] args) {
