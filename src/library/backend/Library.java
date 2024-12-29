@@ -1,5 +1,6 @@
 package library.backend;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -68,6 +69,27 @@ public class Library {
         books.sort((b1, b2) -> b1.getTitle().compareTo(b2.getTitle())); // Sort by title
         for (Book book : books) {
             System.out.println(book);
+        }
+    }
+
+    // Save the library's books to a file
+    public void saveToFile(String filename) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
+            oos.writeObject(books);
+            System.out.println("Library saved successfully.");
+        } catch (IOException e) {
+            System.err.println("Error saving library: " + e.getMessage());
+        }
+    }
+
+    // Load books into the library from a file
+    @SuppressWarnings("unchecked")
+    public void loadFromFile(String filename) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
+            books = (List<Book>) ois.readObject();
+            System.out.println("Library loaded successfully.");
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Error loading library: " + e.getMessage());
         }
     }
 }

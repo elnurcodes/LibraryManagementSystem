@@ -2,13 +2,14 @@ package library.frontend;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class LibraryApp extends JFrame {
 
     public static library.backend.Library library; // Shared library instance
-    private JButton addBookButton, removeBookButton, borrowBookButton, returnBookButton, displayBooksButton, sortByTitleButton, sortByAuthorButton;
+    private JButton addBookButton, removeBookButton, borrowBookButton, returnBookButton, displayBooksButton, sortByTitleButton, sortByAuthorButton, saveLibraryButton, loadLibraryButton;
 
     public LibraryApp() {
         // Initialize the shared library instance
@@ -16,7 +17,7 @@ public class LibraryApp extends JFrame {
 
         // Set up the main JFrame
         setTitle("Library Management System");
-        setSize(600, 400); // Increased size for better layout
+        setSize(700, 500); // Increased size for better layout
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -28,10 +29,12 @@ public class LibraryApp extends JFrame {
         displayBooksButton = new JButton("Display Books");
         sortByTitleButton = new JButton("Sort by Title");
         sortByAuthorButton = new JButton("Sort by Author");
+        saveLibraryButton = new JButton("Save Library");
+        loadLibraryButton = new JButton("Load Library");
 
         // Add buttons to a JPanel
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(7, 1, 10, 10)); // Updated layout for extra buttons
+        buttonPanel.setLayout(new GridLayout(9, 1, 10, 10)); // Updated layout for extra buttons
         buttonPanel.add(addBookButton);
         buttonPanel.add(removeBookButton);
         buttonPanel.add(borrowBookButton);
@@ -39,6 +42,8 @@ public class LibraryApp extends JFrame {
         buttonPanel.add(displayBooksButton);
         buttonPanel.add(sortByTitleButton);
         buttonPanel.add(sortByAuthorButton);
+        buttonPanel.add(saveLibraryButton);
+        buttonPanel.add(loadLibraryButton);
 
         // Add action listeners for buttons
         addBookButton.addActionListener(e -> new AddBookDialog(LibraryApp.this).setVisible(true)); // Add Book Dialog
@@ -58,6 +63,31 @@ public class LibraryApp extends JFrame {
             displayBooks(library.getBooks());
         });
 
+        // Save library to file
+        saveLibraryButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Save Library");
+            int userSelection = fileChooser.showSaveDialog(this);
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                library.saveToFile(file.getAbsolutePath());
+                JOptionPane.showMessageDialog(this, "Library saved successfully to " + file.getName());
+            }
+        });
+
+        // Load library from file
+        loadLibraryButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Load Library");
+            int userSelection = fileChooser.showOpenDialog(this);
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                library.loadFromFile(file.getAbsolutePath());
+                JOptionPane.showMessageDialog(this, "Library loaded successfully from " + file.getName());
+                displayBooks(library.getBooks()); // Refresh the table with the loaded books
+            }
+        });
+
         // Add search bar and button
         JTextField searchField = new JTextField(15);
         JButton searchButton = new JButton("Search");
@@ -73,8 +103,8 @@ public class LibraryApp extends JFrame {
                 displayBooks(library.getBooks()); // Show all books if search is empty
             } else {
                 List<library.backend.Book> filteredBooks = library.getBooks().stream()
-                        .filter(book -> book.getTitle().toLowerCase().contains(query) ||
-                                        book.getAuthor().toLowerCase().contains(query))
+                        .filter(book -> book.getTitle().toLowerCase().contains(query)
+                        || book.getAuthor().toLowerCase().contains(query))
                         .collect(Collectors.toList());
                 displayBooks(filteredBooks); // Show filtered books
             }
