@@ -36,10 +36,10 @@ public class LibraryApp extends JFrame {
         add(buttonPanel, BorderLayout.CENTER);
 
         // Add action listeners for buttons
-        addBookButton.addActionListener(e -> new AddBookDialog(LibraryApp.this).setVisible(true)); // Use LibraryApp.this here
+        addBookButton.addActionListener(e -> new AddBookDialog(LibraryApp.this).setVisible(true)); // Add Book Dialog
         removeBookButton.addActionListener(e -> System.out.println("Remove Book clicked"));
-        borrowBookButton.addActionListener(e -> System.out.println("Borrow Book clicked"));
-        returnBookButton.addActionListener(e -> System.out.println("Return Book clicked"));
+        borrowBookButton.addActionListener(e -> new BorrowBookDialog(LibraryApp.this).setVisible(true));  // Borrow Book Dialog
+        returnBookButton.addActionListener(e -> new ReturnBookDialog(LibraryApp.this).setVisible(true));  // Return Book Dialog
         displayBooksButton.addActionListener(e -> System.out.println("Display Books clicked"));
 
         setLocationRelativeTo(null); // Center the window on the screen
