@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class LibraryApp extends JFrame {
+
     public static library.backend.Library library; // Shared library instance
     private JButton addBookButton, removeBookButton, borrowBookButton, returnBookButton, displayBooksButton;
 
@@ -40,9 +41,25 @@ public class LibraryApp extends JFrame {
         removeBookButton.addActionListener(e -> System.out.println("Remove Book clicked"));
         borrowBookButton.addActionListener(e -> new BorrowBookDialog(LibraryApp.this).setVisible(true));  // Borrow Book Dialog
         returnBookButton.addActionListener(e -> new ReturnBookDialog(LibraryApp.this).setVisible(true));  // Return Book Dialog
-        displayBooksButton.addActionListener(e -> System.out.println("Display Books clicked"));
+        displayBooksButton.addActionListener(e -> displayBooks()); // Action for Display Books
 
         setLocationRelativeTo(null); // Center the window on the screen
+    }
+
+    // Method to display books in a JTable
+    private void displayBooks() {
+        JTable bookTable = new JTable(new BookTableModel(library.getBooks()));
+        JScrollPane scrollPane = new JScrollPane(bookTable);
+        bookTable.setFillsViewportHeight(true);
+
+        // Create a dialog to show the table
+        JDialog dialog = new JDialog(this, "Library Books", true);
+        dialog.setSize(600, 400);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        dialog.setLayout(new BorderLayout());
+        dialog.add(scrollPane, BorderLayout.CENTER);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
     }
 
     public static void main(String[] args) {

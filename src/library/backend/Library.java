@@ -20,6 +20,11 @@ public class Library {
         }
         books.add(book);
     }
+    
+    // Get all books in the library
+    public List<Book> getBooks() {
+        return books;
+    }
 
     public void removeBook(String isbn) {
         books.removeIf(book -> book.getIsbn().equals(isbn));
