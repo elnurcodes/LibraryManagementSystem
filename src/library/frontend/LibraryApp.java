@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 public class LibraryApp extends JFrame {
 
     public static library.backend.Library library; // Shared library instance
-    private JButton addBookButton, removeBookButton, borrowBookButton, returnBookButton, displayBooksButton;
+    private JButton addBookButton, removeBookButton, borrowBookButton, returnBookButton, displayBooksButton, sortByTitleButton, sortByAuthorButton;
 
     public LibraryApp() {
         // Initialize the shared library instance
@@ -26,15 +26,19 @@ public class LibraryApp extends JFrame {
         borrowBookButton = new JButton("Borrow Book");
         returnBookButton = new JButton("Return Book");
         displayBooksButton = new JButton("Display Books");
+        sortByTitleButton = new JButton("Sort by Title");
+        sortByAuthorButton = new JButton("Sort by Author");
 
         // Add buttons to a JPanel
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(5, 1, 10, 10));
+        buttonPanel.setLayout(new GridLayout(7, 1, 10, 10)); // Updated layout for extra buttons
         buttonPanel.add(addBookButton);
         buttonPanel.add(removeBookButton);
         buttonPanel.add(borrowBookButton);
         buttonPanel.add(returnBookButton);
         buttonPanel.add(displayBooksButton);
+        buttonPanel.add(sortByTitleButton);
+        buttonPanel.add(sortByAuthorButton);
 
         // Add action listeners for buttons
         addBookButton.addActionListener(e -> new AddBookDialog(LibraryApp.this).setVisible(true)); // Add Book Dialog
@@ -42,6 +46,17 @@ public class LibraryApp extends JFrame {
         borrowBookButton.addActionListener(e -> new BorrowBookDialog(LibraryApp.this).setVisible(true)); // Borrow Book Dialog
         returnBookButton.addActionListener(e -> new ReturnBookDialog(LibraryApp.this).setVisible(true)); // Return Book Dialog
         displayBooksButton.addActionListener(e -> displayBooks(library.getBooks())); // Show all books by default
+
+        // Sorting action listeners
+        sortByTitleButton.addActionListener(e -> {
+            library.sortBooksByTitle();
+            displayBooks(library.getBooks());
+        });
+
+        sortByAuthorButton.addActionListener(e -> {
+            library.sortBooksByAuthor();
+            displayBooks(library.getBooks());
+        });
 
         // Add search bar and button
         JTextField searchField = new JTextField(15);

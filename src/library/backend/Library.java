@@ -1,6 +1,8 @@
 package library.backend;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Library {
@@ -20,7 +22,7 @@ public class Library {
         }
         books.add(book);
     }
-    
+
     // Get all books in the library
     public List<Book> getBooks() {
         return books;
@@ -50,6 +52,16 @@ public class Library {
         }
         System.out.println("Error: Book with ISBN " + isbn + " is not currently borrowed.");
         return false;
+    }
+
+    // Sort books by title
+    public void sortBooksByTitle() {
+        Collections.sort(books, Comparator.comparing(Book::getTitle));
+    }
+
+    // Sort books by author
+    public void sortBooksByAuthor() {
+        Collections.sort(books, Comparator.comparing(Book::getAuthor));
     }
 
     public void displayBooks() {
