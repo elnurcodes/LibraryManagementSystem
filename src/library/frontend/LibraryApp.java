@@ -2,14 +2,13 @@ package library.frontend;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class LibraryApp extends JFrame {
 
     public static library.backend.Library library; // Shared library instance
-    private JButton addBookButton, removeBookButton, borrowBookButton, returnBookButton, displayBooksButton, sortByTitleButton, sortByAuthorButton, saveLibraryButton, loadLibraryButton;
+    private JButton addBookButton, removeBookButton, borrowBookButton, returnBookButton, displayBooksButton, sortByTitleButton, sortByAuthorButton;
 
     public LibraryApp() {
         // Initialize the shared library instance
@@ -29,8 +28,6 @@ public class LibraryApp extends JFrame {
         displayBooksButton = new JButton("Display Books");
         sortByTitleButton = new JButton("Sort by Title");
         sortByAuthorButton = new JButton("Sort by Author");
-        saveLibraryButton = new JButton("Save Library");
-        loadLibraryButton = new JButton("Load Library");
 
         // Button Styling: Set fonts, background, and foreground colors for buttons
         addBookButton.setFont(new Font("Arial", Font.BOLD, 14));
@@ -46,8 +43,6 @@ public class LibraryApp extends JFrame {
         displayBooksButton.setFont(new Font("Arial", Font.BOLD, 14));
         sortByTitleButton.setFont(new Font("Arial", Font.BOLD, 14));
         sortByAuthorButton.setFont(new Font("Arial", Font.BOLD, 14));
-        saveLibraryButton.setFont(new Font("Arial", Font.BOLD, 14));
-        loadLibraryButton.setFont(new Font("Arial", Font.BOLD, 14));
 
         // Tooltips for buttons
         addBookButton.setToolTipText("Click to add a new book to the library");
@@ -57,12 +52,10 @@ public class LibraryApp extends JFrame {
         displayBooksButton.setToolTipText("Click to view all books in the library");
         sortByTitleButton.setToolTipText("Click to sort books by title");
         sortByAuthorButton.setToolTipText("Click to sort books by author");
-        saveLibraryButton.setToolTipText("Click to save the current library data to a file");
-        loadLibraryButton.setToolTipText("Click to load the library data from a file");
 
         // Add buttons to a JPanel
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(9, 1, 10, 10)); // Updated layout for extra buttons
+        buttonPanel.setLayout(new GridLayout(7, 1, 10, 10)); // Updated layout for removed buttons
         buttonPanel.add(addBookButton);
         buttonPanel.add(removeBookButton);
         buttonPanel.add(borrowBookButton);
@@ -70,8 +63,6 @@ public class LibraryApp extends JFrame {
         buttonPanel.add(displayBooksButton);
         buttonPanel.add(sortByTitleButton);
         buttonPanel.add(sortByAuthorButton);
-        buttonPanel.add(saveLibraryButton);
-        buttonPanel.add(loadLibraryButton);
 
         // Add action listeners for buttons
         addBookButton.addActionListener(e -> new AddBookDialog(LibraryApp.this).setVisible(true)); // Add Book Dialog
@@ -89,31 +80,6 @@ public class LibraryApp extends JFrame {
         sortByAuthorButton.addActionListener(e -> {
             library.sortBooksByAuthor();
             displayBooks(library.getBooks());
-        });
-
-        // Save library to file
-        saveLibraryButton.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Save Library");
-            int userSelection = fileChooser.showSaveDialog(this);
-            if (userSelection == JFileChooser.APPROVE_OPTION) {
-                File file = fileChooser.getSelectedFile();
-                library.saveToFile(file.getAbsolutePath());
-                JOptionPane.showMessageDialog(this, "Library saved successfully to " + file.getName());
-            }
-        });
-
-        // Load library from file
-        loadLibraryButton.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Load Library");
-            int userSelection = fileChooser.showOpenDialog(this);
-            if (userSelection == JFileChooser.APPROVE_OPTION) {
-                File file = fileChooser.getSelectedFile();
-                library.loadFromFile(file.getAbsolutePath());
-                JOptionPane.showMessageDialog(this, "Library loaded successfully from " + file.getName());
-                displayBooks(library.getBooks()); // Refresh the table with the loaded books
-            }
         });
 
         // Add search bar and button
@@ -137,14 +103,6 @@ public class LibraryApp extends JFrame {
                 displayBooks(filteredBooks); // Show filtered books
             }
         });
-
-        // Add Clear Search Button
-        JButton clearSearchButton = new JButton("Clear Search");
-        clearSearchButton.addActionListener(e -> {
-            searchField.setText("");
-            displayBooks(library.getBooks()); // Reset the display
-        });
-        searchPanel.add(clearSearchButton);
 
         // Add panels to the frame
         add(searchPanel, BorderLayout.NORTH); // Search panel at the top
